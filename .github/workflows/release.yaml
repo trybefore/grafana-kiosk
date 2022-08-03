@@ -25,5 +25,5 @@ jobs:
           goos: ${{ matrix.goos }}
           goarch: ${{ matrix.goarch }}
           goversion: 1.16
-          project_path: "./pkg/cmd"
+          project_path: "./pkg/cmd/grafana-kiosk"
           extra_files: LICENSE README.md
