@@ -9,13 +9,15 @@ jobs:
     strategy:
       matrix:
         goos: [linux, windows, darwin]
-        goarch: ["386", amd64, arm64, arm7]
+        goarch: ["386", amd64, arm64, armv7]
         exclude:
           - goarch: "386"
             goos: darwin
+          - goarch: "armv7"
+            goos: darwin
           - goarch: "arm64"
             goos: windows
-          - goarch: "arm7"
+          - goarch: "armv7"
             goos: windows
     steps:
       - uses: actions/checkout@v3
