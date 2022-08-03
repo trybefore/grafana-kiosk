@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
@@ -30,6 +31,8 @@ type Args struct {
 	UsernameField           string
 	PasswordField           string
 	WindowPosition          string
+	WindowSize              string
+	StartMaximized          bool
 }
 
 // ProcessArgs processes and handles CLI arguments
@@ -52,6 +55,8 @@ func ProcessArgs(cfg interface{}) Args {
 	f.BoolVar(&a.OauthAutoLogin, "auto-login", false, "oauth_auto_login is enabled in grafana config")
 	f.StringVar(&a.UsernameField, "field-username", "username", "Fieldname for the username")
 	f.StringVar(&a.PasswordField, "field-password", "password", "Fieldname for the password")
+	f.StringVar(&a.WindowSize, "window-size", "1920x1080", "The size of the chromium window")
+	f.BoolVar(&a.StartMaximized, "start-maximized", true, "Wether to start the browser in fullscreen")
 
 	fu := f.Usage
 	f.Usage = func() {
@@ -90,23 +95,9 @@ func setEnvironment() {
 }
 
 func summary(cfg *kiosk.Config) {
-	// general
-	log.Println("AutoFit:", cfg.General.AutoFit)
-	log.Println("LXDEEnabled:", cfg.General.LXDEEnabled)
-	log.Println("LXDEHome:", cfg.General.LXDEHome)
-	log.Println("Mode:", cfg.General.Mode)
-	log.Println("WindowPosition:", cfg.General.WindowPosition)
-	// target
-	log.Println("URL:", cfg.Target.URL)
-	log.Println("LoginMethod:", cfg.Target.LoginMethod)
-	log.Println("Username:", cfg.Target.Username)
-	log.Println("Password:", "*redacted*")
-	log.Println("IgnoreCertificateErrors:", cfg.Target.IgnoreCertificateErrors)
-	log.Println("IsPlayList:", cfg.Target.IsPlayList)
-	// goauth
-	log.Println("Fieldname Username:", cfg.GOAUTH.AutoLogin)
-	log.Println("Fieldname Username:", cfg.GOAUTH.UsernameField)
-	log.Println("Fieldname Password:", cfg.GOAUTH.PasswordField)
+	bs, _ := json.Marshal(&cfg)
+
+	log.Printf("%s", string(bs))
 }
 
 func main() {
@@ -140,6 +131,8 @@ func main() {
 		cfg.General.LXDEHome = args.LXDEHome
 		cfg.General.Mode = args.Mode
 		cfg.General.WindowPosition = args.WindowPosition
+		cfg.General.WindowSize = args.WindowSize
+		cfg.General.StartMaximized = args.StartMaximized
 		//
 		cfg.GOAUTH.AutoLogin = args.OauthAutoLogin
 		cfg.GOAUTH.UsernameField = args.UsernameField

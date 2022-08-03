@@ -32,6 +32,9 @@ func GrafanaKioskLocal(cfg *Config) {
 		chromedp.Flag("ignore-certificate-errors", cfg.Target.IgnoreCertificateErrors),
 		chromedp.Flag("test-type", cfg.Target.IgnoreCertificateErrors),
 		chromedp.Flag("window-position", cfg.General.WindowPosition),
+		chromedp.Flag("window-size", cfg.General.WindowSize),
+		chromedp.Flag("start-maximized", cfg.General.StartMaximized),
+		chromedp.Flag("start-fullscreen", true),
 		chromedp.Flag("check-for-update-interval", "31536000"),
 		chromedp.UserDataDir(dir),
 	}
